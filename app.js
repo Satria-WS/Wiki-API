@@ -14,12 +14,27 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //going to use the public directory to store out static files such as images css code
 app.use(express.static("public"));
 //Connect to mongodb
-mongoose.connect("mongodb://localhost:27017/wikiDB",{useNewUrlParser: true});
+mongoose.connect("mongodb://localhost:27017/wikiDB", { useNewUrlParser: true });
 //create db articleSchema
 const articleSchema = {
-    title:"String",
-    content:"String"
+  title: "String",
+  content: "String"
 };
+//crate model name
+const Article = mongoose.model("Article", articleSchema);
+//Get routes, Fetches all the entire collection of articles
+app.get("/articles", (req, res) => {
+  //syntax code: <ModelName>.find({conditions},function(err,results){//user the found results doct});;
+  Article.find((err, foundArticles) => {
+    //console.log(foundArticles);
+    if (!err) {
+      //res.send log to client
+      res.send(foundArticles);
+    } else {
+      res.send(err);
+    }
+  });
+});
 
 //The last part set up our app to listen on port 3000
 app.listen(3000, () => {
