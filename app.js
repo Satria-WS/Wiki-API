@@ -75,7 +75,7 @@ app
 //////////////////////////////////////////////Requests Targetting all Articles//////////////////////////////////////
 
 //How to dealing route parameters with specific article
-app.route("/aritlces/:articlesTitle")
+app.route("/articles/:articlesTitle")
 .get((req, res) => {
   Article.findOne({title: req.params.articlesTitle},(err, foundSpecificArticles) => {
     if (foundSpecificArticles) {
