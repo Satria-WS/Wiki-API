@@ -75,7 +75,7 @@ app
 //////////////////////////////////////////////Requests Targetting all Articles//////////////////////////////////////
 
 //How to dealing route parameters with specific article
-//read
+//read specific article
 app
   .route("/articles/:articlesTitle")
   .get((req, res) => {
@@ -90,18 +90,41 @@ app
       }
     );
   })
-  //update
+  //update specific article
   .put((req, res) => {
-    Article.update(
+    Article.updateOne(
       { title: req.params.articlesTitle },
       { title: req.body.title, content: req.body.content },
-      { overwrite: true },
       function (err) {
         if (!err) {
           res.send("Successfully updated article");
         }
       }
     );
+  })
+  //patch specific article
+  .patch((req, res) => {
+    Article.update(
+      { title: req.params.articlesTitle },
+      { $set: req.body },
+      function (err) {
+        if (!err) {
+          res.send("Successfull updated article");
+        } else {
+          res.send(err);
+        }
+      }
+    );
+  })
+  .delete((req, res) => {
+    Article.deleteOne({ title: req.params.articlesTitle }, 
+    (err) => {
+      if (!err) {
+        res.end("Successfully deleted the corresponding article");
+      } else {
+          res.send(err);
+      }
+    });
   });
 
 //Get routes, Fetches all the entire collection of articles
