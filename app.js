@@ -28,8 +28,11 @@ const articleSchema = {
 };
 //crate model name
 const Article = mongoose.model("Article", articleSchema);
+
+//////////////////////////////////////////////Requests Targetting all Articles//////////////////////////////////////
 //create chain route
-app.route("/articles")
+app
+  .route("/articles")
   .get((req, res) => {
     //syntax code: <ModelName>.find({conditions},function(err,results){//user the found results doct});;
     Article.find((err, foundArticles) => {
@@ -68,6 +71,20 @@ app.route("/articles")
       }
     });
   });
+
+//////////////////////////////////////////////Requests Targetting all Articles//////////////////////////////////////
+
+//How to dealing route parameters with specific article
+app.route("/aritlces/:articlesTitle")
+.get((req, res) => {
+  Article.findOne({title: req.params.articlesTitle},(err, foundSpecificArticles) => {
+    if (foundSpecificArticles) {
+      res.send(foundSpecificArticles);
+    } else {
+      res.send("Your article not found");
+    }
+  });
+})
 
 //Get routes, Fetches all the entire collection of articles
 app.get("/articles");
