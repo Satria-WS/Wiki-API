@@ -75,16 +75,34 @@ app
 //////////////////////////////////////////////Requests Targetting all Articles//////////////////////////////////////
 
 //How to dealing route parameters with specific article
-app.route("/articles/:articlesTitle")
-.get((req, res) => {
-  Article.findOne({title: req.params.articlesTitle},(err, foundSpecificArticles) => {
-    if (foundSpecificArticles) {
-      res.send(foundSpecificArticles);
-    } else {
-      res.send("Your article not found");
-    }
+//read
+app
+  .route("/articles/:articlesTitle")
+  .get((req, res) => {
+    Article.findOne(
+      { title: req.params.articlesTitle },
+      (err, foundSpecificArticles) => {
+        if (foundSpecificArticles) {
+          res.send(foundSpecificArticles);
+        } else {
+          res.send("Your article not found");
+        }
+      }
+    );
+  })
+  //update
+  .put((req, res) => {
+    Article.update(
+      { title: req.params.articlesTitle },
+      { title: req.body.title, content: req.body.content },
+      { overwrite: true },
+      function (err) {
+        if (!err) {
+          res.send("Successfully updated article");
+        }
+      }
+    );
   });
-})
 
 //Get routes, Fetches all the entire collection of articles
 app.get("/articles");
